@@ -2,7 +2,7 @@
 
 
 Update 1.1v
- 1. Updated the code, as the newest versions of OpenAI no longer support the previous util.embedding. 
+ 1. Updated the code, as the newest versions of OpenAI no longer support the previous util.embedding. Credit goes to OpenAI-Cookbook on github for providing the fix.
  2. Now cycles through multiple PDFs so you only need to run the script once.
   2a. Deposits the completed PDF, along with the .csv files into a seperate folder titles "archive". Jut added this feature incase I wanted to look back on what was the tagged. 
  3. Updated the prompt to select cards with Anking examples. Found that this made the tagging more selective with the cards.
