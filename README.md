@@ -1,5 +1,17 @@
 # Anki_Tagger
 
+
+Update 1.1v
+ 1. Updated the code, as the newest versions of OpenAI no longer support the previous util.embedding. 
+ 2. Now cycles through multiple PDFs so you only need to run the script once.
+  2a. Deposits the completed PDF, along with the .csv files into a seperate folder titles "archive". Jut added this feature incase I wanted to look back on what was the tagged. 
+ 3. Updated the prompt to select cards with Anking examples. Found that this made the tagging more selective with the cards.
+ 4. Updated the script to run on gpt-4o mini. Cheaper, faster and better.
+ 5. Reorganized the scripts so you only need to run "tag_cards.py" to make objectives, select and tag cards.
+ 6. This is just a personal thing, but I made "tag_cards.py" copy and paste the anki.apkg, as to not contaminate the orginal anki deck. I chose to add this feature because I also tag the cards for my M1 class.
+ 7. Waits after all the PDFs are completed to tag the deck. This feature was to minimize overlapping cards between lecutures.
+
+----------
 This is a project I started as a fourth year medical student. Anki was a huge part of my medical education, and this felt like a productive way to give back for everything others have done.
  
 Big picture, this set of scripts will parse a lecture guide and identify the most relevant anki cards within a premade Anki deck. 
