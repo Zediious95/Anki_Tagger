@@ -1,6 +1,33 @@
 # Anki_Tagger
 
+## Installation
+```bash
+#Install the git hub
+git clone https://github.com/Zediious95/Anki_Tagger.git
 
+#Install all required packages
+pip install -r requirements.txt
+```
+
+1. In anki, export the deck as "anki_deck.apkg"
+
+2. In anki, export the deck using the Notes as plain text funcion, and select to include a unique identifier: "anki.txt"
+
+3. Place both in "Data" Folder 
+
+##4. Embed the anki txt file 
+```bash
+python Scripts/embed_anki_deck.py Data/anki.txt
+```
+5. Place PDF's in the same folder as main.py
+
+##6. Start tagging cards
+```bash
+python main.py
+```
+
+
+----------
 Update 1.1v
  1. Updated the code, as the newest versions of OpenAI no longer support the previous util.embedding. Credit goes to OpenAI-Cookbook on github for providing the fix.
  2. Now cycles through multiple PDFs so you only need to run the script once.
