@@ -4,15 +4,18 @@ import zipfile
 import pandas as pd
 from anki.collection import Collection
 
-HIGH_RELEVANCE_CUTOFF = 70
-MEDIUM_RELEVANCE_CUTOFF = 40
-REMOVE_RELEVANCE_CUTOFF = 10
+HIGH_RELEVANCE_CUTOFF = 80
+MEDIUM_RELEVANCE_CUTOFF = 50
+REMOVE_RELEVANCE_CUTOFF = 40
 
 def main(card_path, anki_apkg):
 
     # Load the csv file into a DataFrame
     df = pd.read_csv(card_path)
     df = df.fillna(0)
+
+    pd.set_option('display.max_columns', None)
+    pd.set_option('display.max_rows', None)
 
     # Group by 'guid' and keep only the row with the highest 'score' for each group
     df = df.loc[df.groupby('guid')['score'].idxmax()]
