@@ -2,11 +2,12 @@ import os, re, sys, csv, glob, time
 import openai
 import tiktoken
 import pdfplumber
-from openai.error import RateLimitError, APIError
-from openai.embeddings_utils import get_embedding
+from openai import RateLimitError, APIError
+from util.embeddings_utils import get_embedding
 from pathlib import Path
+    #Python3 Scripts/make_learning_objectives.py learning_guide.pdf
 
-MAX_TOKENS = 16384
+MAX_TOKENS = 4096
 TOKEN_BUFFER = 1000
 
 def set_api_key():
@@ -20,13 +21,17 @@ def handle_api_error(func):
         while True:
             try:
                 return func(*args, **kwargs)
-            except (RateLimitError, APIError):
-                print('API Error. Waiting 10s before retrying.')
+            except APIError as e:
+                if isinstance(e, RateLimitError):
+                    print(f"RateLimitError occurred: {e}")
+                else:
+                    print(f"APIError occurred: {e}")
+                print(f"Error code: {e.code}")
                 time.sleep(10)  # wait for 10 seconds before retrying
     return wrapper
 
 def count_tokens(text):
-    enc = tiktoken.encoding_for_model("gpt-3.5-turbo-16k")
+    enc = tiktoken.encoding_for_model("gpt-4o-mini")
     tokens = list(enc.encode(text))
     return len(tokens)
 
@@ -41,24 +46,25 @@ def generate_questions(prompt, temperature=1.0):
     remaining_tokens = MAX_TOKENS - count_tokens(" ".join([message["content"] for message in formatted_prompt])) - TOKEN_BUFFER
 
     if remaining_tokens < TOKEN_BUFFER:
-        print(f"Warning! Input text is longer than model gpt-3.5-turbo-16k can support. Consider trimming input and trying again.")
+        print(f"Warning! Input text is longer than model gpt-4o can support. Consider trimming input and trying again.")
         print(f"Current length: {count_tokens(prompt)}, recommended < {MAX_TOKENS - TOKEN_BUFFER}")
         raise ValueError('Input text too long')
 
-    completions = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo-16k",
+    completion = openai.chat.completions.create(
+        model="gpt-4o-mini",
         messages=formatted_prompt,
         max_tokens=remaining_tokens,
         n=1,
         stop=None,
         temperature=temperature)
 
-    return completions['choices'][0]['message']['content'].strip()
+    return completion.choices[0].message.content.strip()
 
 @handle_api_error
 def define_objectives_from_pdf(pdf_file, temperature=1.0):
     text = extract_text_from_pdf(pdf_file)
-    prompt = f"Generate a list of learning questions that comprehensively covers the most important information presented in the text below to understand the topics presented.\n\n{text}"
+    prompt = f"Do not say speak. Transcribe the numerical questions exactly. Ignore any titles or headings in the pdf.\n\
+    \n\n{text}"
     generated_text = generate_questions(prompt, temperature=1.0)
     objectives = [line.strip() for line in generated_text.split("\n") if line.strip()]
     return objectives
@@ -71,7 +77,7 @@ def generate_embedding(obj, embedding_model="text-embedding-ada-002", embedding_
 
     # Generate the tokens and embeddings
     tokens = len(encoding.encode(obj))
-    emb = get_embedding(obj, engine=embedding_model)
+    emb = get_embedding(obj, model=embedding_model)
 
     return tokens, emb
 
