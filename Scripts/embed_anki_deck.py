@@ -3,7 +3,7 @@ import os
 import openai
 import pandas as pd
 import tiktoken
-from openai.embeddings_utils import get_embedding
+from util.embeddings_utils import get_embedding
 from tqdm import tqdm
 
 # OpenAI Configuration
@@ -11,6 +11,7 @@ OPENAI_API_KEY_ENV_VAR = 'OPENAI_API_KEY'
 EMBEDDING_MODEL = "text-embedding-ada-002"
 EMBEDDING_ENCODING = "cl100k_base"
 MAX_TOKENS = 8000
+    #python3 embed_anki_deck.py anki.txt
 
 def set_api_key(api_key):
     openai.api_key = api_key
@@ -26,7 +27,7 @@ def filter_by_tokens(df, encoding):
     return df[df.tokens <= MAX_TOKENS]
 
 def calculate_embeddings(df):
-    return [get_embedding(card, engine=EMBEDDING_MODEL) for card in tqdm(df.card, desc="Calculating embeddings", dynamic_ncols=True)]
+    return [get_embedding(card, model=EMBEDDING_MODEL) for card in tqdm(df.card, desc="Calculating embeddings", dynamic_ncols=True)]
 
 def save_embeddings(df, output_prefix):
     df.to_csv(f"./{output_prefix}_embeddings.csv", index=False)
