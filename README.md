@@ -13,7 +13,7 @@ pip install -r requirements.txt
 
 2. In anki, export the deck using the Notes as plain text funcion, and select to include a unique identifier: "anki.txt"
 
-3. Place both in "Data" Folder 
+3. Make a folder titled "Data", and place both "anki_deck.apkg" and "anki.txt" inside of it.
 
 ## 4. Embed the anki txt file 
 ```bash
