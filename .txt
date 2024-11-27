@@ -1,0 +1,10 @@
+tiktoken
+pandas
+openai
+numpy
+pdfplumber
+scipy
+matplotlib
+plotly
+scikit-learn
+anki
