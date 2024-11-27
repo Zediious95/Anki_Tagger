@@ -15,13 +15,13 @@ pip install -r requirements.txt
 
 3. Place both in "Data" Folder 
 
-##4. Embed the anki txt file 
+## 4. Embed the anki txt file 
 ```bash
 python Scripts/embed_anki_deck.py Data/anki.txt
 ```
 5. Place PDF's in the same folder as main.py
 
-##6. Start tagging cards
+## 6. Start tagging cards
 ```bash
 python main.py
 ```
