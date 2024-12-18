@@ -45,8 +45,7 @@ for pdf_file in pdf_files:
     pdf_name = os.path.splitext(os.path.basename(pdf_file))[0]
 
     script_file_pairs = [
-        #("Scripts/make_learning_objectives.py", pdf_file),
-        ("Scripts/LearnObjtest.py", pdf_file),
+        ("Scripts/make_learning_objectives.py", pdf_file),
         ("Scripts/select_cards.py", "Data/anki_embeddings.csv", f"{pdf_name}_learning_objectives.csv"),
     ]
 
