@@ -8,7 +8,8 @@ from tqdm import tqdm
 
 # OpenAI Configuration
 OPENAI_API_KEY_ENV_VAR = 'OPENAI_API_KEY'
-EMBEDDING_MODEL = "text-embedding-ada-002"
+EMBEDDING_MODEL = "text-embedding-3-small"
+#EMBEDDING_MODEL = "text-embedding-ada-002"
 EMBEDDING_ENCODING = "cl100k_base"
 MAX_TOKENS = 8000
     #python3 embed_anki_deck.py anki.txt
