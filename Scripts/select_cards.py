@@ -6,8 +6,8 @@ import tiktoken
 from openai import APIError, RateLimitError, APIConnectionError
 import time, requests
 
-MAX_POOR_MATCH_RUN = 10
-MAX_TOKENS_PER_OBJ = 30000 #Change token count if you more or less cards to be assessed per learning objective
+MAX_POOR_MATCH_RUN = 12
+MAX_TOKENS_PER_OBJ = 30000
 
 def set_api_key():
     try:
@@ -48,39 +48,10 @@ def vs(x, y):
 
 def construct_prompt(obj,card):
 
-    prompt = f"Task: Rate the relevance of the Anki card to the learning question on a scale from 0 to 100. Be aware that even partial information related to core concepts should receive a high score if it contributes to understanding the learning question.\n\
+    prompt = f"Task: Rate the relevance of the Anki card to the learning question on a scale from 0 to 100.\n\
      Learning questions can be complex, and Anki cards may contain fragmented information that partially addresses the full scope of the question.\n\
-Instructions: Focus on how well the Anki card addresses any key concepts or foundational knowledge needed to answer the learning question, even if it doesn’t answer it fully.\n\
-Partial answers that provide important context or core definitions should receive a higher score for their contribution to understanding.\n\
-Break down complex learning questions into sub-questions and evaluate how the Anki card contributes to any part of the question, giving special weight to fundamental concepts related to the topic.\n\
+Instructions: Focus on how well the Anki card addresses any key concepts or foundational knowledge needed to answer the learning question.\n\
 Format: Start your statement with 'Score: # (just the final score number. No need to say 90 out of 100. Just say Score: 90)' followed with the arguement for the score. Limit your response to less than 25 words.\n\
-Examples:\n\
-Learning Question 1: Describe the morphology, features, functions, and lifespan of blood cells such as erythrocytes and leukocytes.\n\
-Interpretation of sub-Question 1: What is the lifespan of an erythrocyte? What is the morphology of an erythrocyte? What are the features and functions of an erythrocyte? What is the lifespan of a leukocyte? What is the morphology of a leukocyte? What are the features and functions of a leukocyte?\n\
-Anki Card 1: Erythrocytes (RBCs) carry O2 to tissues and CO2 to lungs.\n\
-How to score Anki Card 1: Score 100 Since the card directly addresses the function of erythrocytes, a core part of the learning question, it should receive a high score (90–100) even though it doesn’t mention morphology or lifespan. Function is a critical part of understanding blood cells.\n\
-Anki Card 2: Do erythrocytes contain organelles? No.\n\
-How to score Anki Card 2: Score 90 This card identifies a unique morphological feature of erythrocytes (the lack of organelles), which is essential for distinguishing them from other cells. While it doesn’t cover function or lifespan, it still provides key information about morphology. It should receive a high score for contributing important knowledge toward understanding the morphology of erythrocytes.\n\
-Anki Card 3: What RBC pathology is characterized by formation and loss of membrane blebs over time? Hereditary spherocytosis.\n\
-How to score Anki Card 2: Score 40 This card touches up a unique pathologic morphology of erythrocytes, but the questions focused on non-pathological characteristics.\n\
-Learning Question 2: Interpret complete blood count (CBC) results and identify abnormal values for leukocytes, erythrocytes, and platelets.\n\
-Interpretation of sub-Question 2: What is a complete blood count (CBC) test? What is a normal CBC result for leukocytes? What is a normal CBC result for erythrocytes? What is a normal CBC result for platelets? What is an abnormal CBC result for leukocytes? What is an abnormal CBC result for erythrocytes? What is an abnormal CBC result for platelets?\n\
-How to score: If the Anki card defines what a CBC test is, it should receive a high score (e.g., 85–100), even if it doesn’t provide specific details about normal or abnormal values for each cell type.\n\
-Learning Question 3: What are the sequential steps involved in the processes of platelet activation and aggregation during primary hemostasis?\n\
-Interpretation of sub-question 3: What are the steps involved in platelet activation? What are the steps involved in platelet aggregation? What is primary hemostasis?\n\
-Anki Card 1: Following platelet adhesion (primary hemostasis), there is platelet degranulation.\n\
-How to score Anki Card 1: Score 90 This card contains key terminology (platelet adhesion and degranulation) that is directly relevant to the sequence of events in primary hemostasis. It provides crucial information about the process and should be rated highly, even though it doesn’t describe all the steps in detail.\n\
-Anki card 2: In order to adhere to the damaged endothelium, platelets bind vWF using the GPIb receptor\n\
-How to score Anki Card 2: Score 85 This card provides critical information about the initial step in platelet adhesion (binding to von Willebrand factor via the GPIb receptor), which is part of the sequence in primary hemostasis. It should receive a high score as it describes a key step in the process of platelet activation and aggregation, even though it doesn’t cover all subsequent steps.\n\
-Anki Card 3: Platelets (thrombocytes) are small cytoplasmic fragments derived from megakaryocytes.\n\
-How to score Anki Card 3: Score 60 This card mentions platelets and it's origin, but it doesn't explore platelet activation, aggregation or primary homestasis.\n\
-Anki Card 4: What is the most common cause of abnormal hemostasis in patients with chronic renal failure? Platelet dysfunction\n\
-How to score Anki Card 4: Score 40 This card covers the abnormality of homestasis though platelet dysfunction, but it doesn't directly answer any question relating to platelet activation, aggregation or primary homestasis\n\
-Learning Question 4: In what ways does melanization act as a protective strategy for the skin against harmful effects of ultraviolet (UV) light exposure?\n\
-Interpretation of Question 4: What is melanization? How do melanocytes produce melanin? How does melanin protect the skin from UV light? What are the harmful effects of UV light?\n\
-Anki Card 1: “Melanocytes synthesize melanin using the amino acid tyrosine as a precursor molecule.”\n\
-How to score Anki Card 1: Score 90 Since the card provides essential context about melanin production by melanocytes, which is a core concept in answering how melanization protects against UV light, it should receive a high score for its relevance. Even though it doesn’t fully explain the protective strategy, it addresses foundational knowledge essential for understanding the broader mechanism.\n\
-End of examples\n\
     Learning question: {obj}\n\
     Anki card: {card}"
 
@@ -176,7 +147,7 @@ def main(emb_path,obj_path):
             for index,emb_row in emb_df.iterrows():
 
                 if poor_match_run_count > MAX_POOR_MATCH_RUN or tokens_used > MAX_TOKENS_PER_OBJ:
-                    #print(f"Tokens used: {tokens_used}")
+                    print(f"Tokens used: {tokens_used}")
                     break
 
                 guid = emb_row['guid']
