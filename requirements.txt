@@ -8,3 +8,7 @@ matplotlib
 plotly
 scikit-learn
 anki
+reportlab
+python-docx
+python-pptx
+PyMuPDF
