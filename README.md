@@ -19,13 +19,16 @@ pip install -r requirements.txt
 ```bash
 python Scripts/embed_anki_deck.py Data/anki.txt
 ```
-5. Place PDF's in the same folder as main.py
+5. Make a folder titled "Lectures", and create subfolders titled after the tag-names you'll be using. Ensure theses no spaces for the subfolders names
+  
+6. Place all corresponding lecture material in the subfolder (For my school, I make subfolders titled '01.Vitamins_1', '02.Vitamins_2', '03.Lipids_1', etc., and place the corresponding lecture material inside each subfolder)
 
 ## 6. Start tagging cards
 ```bash
 python main.py
 ```
 
+7. Open the anki.apgk with Special Fields Anki addon (Addon# 1102281552)
 
 ----------
 Update 1.1v
