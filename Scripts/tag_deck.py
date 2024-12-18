@@ -3,8 +3,9 @@ import shutil
 import zipfile
 import pandas as pd
 from anki.collection import Collection
+    #python3 Scripts/tag_deck.py learning_guide_cards.csv anki_deck.apkg
 
-HIGH_RELEVANCE_CUTOFF = 80
+HIGH_RELEVANCE_CUTOFF = 70
 MEDIUM_RELEVANCE_CUTOFF = 50
 REMOVE_RELEVANCE_CUTOFF = 40
 
